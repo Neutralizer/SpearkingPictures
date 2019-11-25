@@ -17,55 +17,55 @@ public class SpeakingRect {
     private int id;
     @ColumnInfo(name = "picture_name")
     private String picName;
-    @Ignore
+    @ColumnInfo(name = "rect_paint")
     private Paint paint;//TODO move paint in separate class ?
     @Ignore
-    private Rect rect;//TODO extend rect and drop the point? could be useful for touch expanding the rect
+    private Rect rect;//TODO extend rect and drop the point? could be useful for touch expanding the rect //drop ignore and store the whole rect with its 4 points inside
     @ColumnInfo(name = "point_location")
     private Point point;
-    @ColumnInfo(name = "border_thickness")
-    private int borderThickness;
-    @ColumnInfo(name = "rect_size")
+//    @ColumnInfo(name = "border_thickness")
+//    private int borderThickness;
+    @ColumnInfo(name = "rect_size")//TODO will be dropped also if rect has 4 points persisted - move to where point to 4 rect side conversion will be - not in db?
     private int size;
-    @ColumnInfo(name = "border_color")
-    private int color;
-    @ColumnInfo(name = "border_alpha")
-    private int alpha;
+//    @ColumnInfo(name = "border_color")
+//    private int color;
+//    @ColumnInfo(name = "border_alpha")
+//    private int alpha;
 
-    public SpeakingRect(int id, String picName, Point point) {
+    public SpeakingRect(int id, String picName, Point point, Paint paint) {
         this.id = id;
         this.picName = picName;
-        this.paint = new Paint();
+        this.paint = paint;
         this.rect = new Rect();
         this.point = point;
-        this.borderThickness = 3;
+//        this.borderThickness = 3;
         this.size = 50;
-        this.color = Color.RED;
-        this.alpha = 100;
+//        this.color = Color.RED;
+//        this.alpha = 100;
         setRectPosition(this.point);//TODO change to 4 sides and transform from point to rect in the dao
-        paint.setColor(this.color);
-        paint.setStrokeWidth(borderThickness);
-        paint.setAlpha(this.alpha);
-        paint.setStyle(Paint.Style.STROKE);
+//        paint.setColor(this.color);
+//        paint.setStrokeWidth(borderThickness);
+//        paint.setAlpha(this.alpha);
+//        paint.setStyle(Paint.Style.STROKE);//TODO always with this
     }
 
-    @Ignore
-    public SpeakingRect(int id, String picName, Point point, int borderThickness, int size, int color, int alpha) {
-        this.id = id;
-        this.picName = picName;
-        this.paint = new Paint();
-        this.rect = new Rect();
-        this.point = point;
-        this.borderThickness = borderThickness;
-        this.size = size;
-        this.color = color;
-        this.alpha = alpha;
-        setRectPosition(this.point);
-        paint.setColor(this.color);
-        paint.setStrokeWidth(this.borderThickness);
-        paint.setAlpha(this.alpha);//1-255
-        paint.setStyle(Paint.Style.STROKE);
-    }
+//    @Ignore
+//    public SpeakingRect(int id, String picName, Point point, int borderThickness, int size, int color, int alpha) {
+//        this.id = id;
+//        this.picName = picName;
+//        this.paint = new Paint();
+//        this.rect = new Rect();
+//        this.point = point;
+//        this.borderThickness = borderThickness;
+//        this.size = size;
+//        this.color = color;
+//        this.alpha = alpha;
+//        setRectPosition(this.point);
+//        paint.setColor(this.color);
+//        paint.setStrokeWidth(this.borderThickness);
+//        paint.setAlpha(this.alpha);//1-255
+//        paint.setStyle(Paint.Style.STROKE);
+//    }
 
     public int getId() {
         return id;
@@ -108,11 +108,11 @@ public class SpeakingRect {
      * @param thickness
      */
     public void setBorderThickness(int thickness){
-        this.borderThickness = thickness;
+        this.paint.setStrokeWidth(thickness);
     }
 
     public int getBorderThickness(){
-        return borderThickness;
+        return (int) this.paint.getStrokeWidth();
     }
 
     public int getSize() {
@@ -128,12 +128,11 @@ public class SpeakingRect {
      * @param color
      */
     public void setColor(int color){
-        this.color = color;
-        paint.setColor(this.color);
+        paint.setColor(color);
     }
 
     public int getColor(){
-        return this.color;
+        return paint.getColor();
     }
 
 
@@ -142,34 +141,34 @@ public class SpeakingRect {
      * @param alpha
      */
     public void setAlpha(int alpha) {
-        this.alpha = alpha;
+        this.paint.setAlpha(alpha);
     }
 
     public int getAlpha() {
-        return alpha;
+        return this.paint.getAlpha();
     }
 
     public void setRectPosition(Point point){
         rect.set (point.x - size, point.y - size, point.x + size, point.y +size);
     }
 
-    /**
-     * Checks if the new rect will be inside this one
-     * @param point
-     * @return
-     */
-    public boolean isPointInsideRect(Point point){
-        return this.rect.contains(point.x,point.y);
-    }
+//    /**
+//     * Checks if the new rect will be inside this one //TODO areRectanglesIntersecting does more work
+//     * @param point
+//     * @return
+//     */
+//    public boolean isPointInsideRect(Point point){
+//        return this.rect.contains(point.x,point.y);
+//    }
 
-    /**
-     * Checks if the new rect will be inside of this one
-     * @param rect
-     * @return
-     */
-    public boolean isRectInside(SpeakingRect rect){
-        return this.rect.contains(rect.getRect());
-    }
+//    /**
+//     * Checks if the new rect will be inside of this one //TODO areRectanglesIntersecting does more work
+//     * @param rect
+//     * @return
+//     */
+//    public boolean isRectInside(SpeakingRect rect){
+//        return this.rect.contains(rect.getRect());
+//    }
 
     /**
      * Is the new rect touching this one
@@ -177,15 +176,15 @@ public class SpeakingRect {
      * @param newSize
      * @return
      */
-    public boolean areRectanglesIntersecting(Point newPoint, int newSize){
+    public boolean areRectanglesIntersecting(Point newPoint, int newSize){//TODO check for all 4 points
         if(//TODO check for out of bounds
            this.rect.contains(newPoint.x - newSize, newPoint.y - newSize) &&
            this.rect.contains(newPoint.x + newSize,newPoint.y + newSize)
         ){
             return true;
-        } else {
-            return false;
         }
+        return false;
+
     }
 
 

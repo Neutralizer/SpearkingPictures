@@ -55,8 +55,6 @@ public class CustomImageView extends ImageView {
     public void onDraw(Canvas canvas) {//TODO just display the rects of the pic
         super.onDraw(canvas);
 
-//        if(manipulator != null){
-//            ArrayList<SpeakingRect> pictureRectangles = manipulator.getRectangles("caters");//TODO picName is hardcoded
             for (SpeakingRect rect : rectList){
                 canvas.drawRect(rect.getRect().left, rect.getRect().top, rect.getRect().right, rect.getRect().bottom, rect.getPaint());
             }
