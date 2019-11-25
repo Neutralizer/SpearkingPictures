@@ -1,22 +1,28 @@
 package com.dao;
 
-import android.graphics.Point;
-
+import android.graphics.Paint;
 import androidx.room.TypeConverter;
 
-import java.util.Arrays;
-import java.util.List;
+import com.google.gson.Gson;
+
 
 public class PaintConverter {
 
-//    @TypeConverter
-//    public static Point stringToPoint(String value) {
-//        List<String> list = Arrays.asList(value.split(","));
-//        return value == null ? null : new Point(Integer.parseInt(list.get(0)),Integer.parseInt(list.get(1)));
-//    }
-//
-//    @TypeConverter
-//    public static String pointToString(Point point) {
-//        return point == null ? null : point.x + "," + point.y;
-//    }
+    @TypeConverter
+    public static Paint stringToPaint(String value) {
+        if(value == null){
+            return new Paint();
+        }
+        Paint paint = new Gson().fromJson(value,Paint.class);
+        return paint;
+    }
+
+    @TypeConverter
+    public static String paintToString(Paint value) {
+        if(value == null){
+            return null;
+        }
+        String json = new Gson().toJson(value);
+        return json;
+    }
 }

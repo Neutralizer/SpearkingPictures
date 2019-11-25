@@ -33,4 +33,6 @@ dependencies {
     implementation 'androidx.core:core:1.1.0'
     //picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    //gson - json to string for room db
+    implementation 'com.google.code.gson:gson:2.6.2'
 }
