@@ -9,7 +9,7 @@ import androidx.room.TypeConverters;
 
 import com.rect.SpeakingRect;
 
-@Database(entities = SpeakingRect.class, exportSchema = false, version = 1)
+@Database(entities = SpeakingRect.class, exportSchema = false, version = 2)
 @TypeConverters({PointConverter.class, PaintConverter.class})
 public abstract class RectDatabase extends RoomDatabase {
 
