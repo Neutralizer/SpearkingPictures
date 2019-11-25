@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/imageView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    >
+
+
+<!--    <Button-->
+<!--        android:id="@+id/previous_btn"-->
+<!--        android:layout_width="124dip"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Previous" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/next_btn"-->
+<!--        android:layout_width="124dip"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_toRightOf="@+id/previous_btn"-->
+<!--        android:text="Next" />-->
+
+<!--    <com.speakingpictures.views.CustomImageView-->
+<!--        android:id="@+id/myimageID"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/previous_btn"-->
+<!--        android:adjustViewBounds="true"-->
+<!--        android:contentDescription="TODO"-->
+<!--        android:scaleType="centerInside" />-->
+
+    <com.speakingpictures.views.CustomImageView
+        android:id="@+id/myimageID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scaleType="centerInside" />
+<!--    layout weight check it TODO -->
+
+    <Button
+        android:id="@+id/buttonLoadPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="Load Picture"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"></Button>
+    <!--    centerInside check it new addition TODO -->
+
+</LinearLayout>
