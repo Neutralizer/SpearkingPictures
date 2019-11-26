@@ -104,7 +104,7 @@ public class ImageViewMain extends Activity implements OnTouchListener {
                 List<SpeakingRect> allRects = rectDaoImpl.getAllRects();
                 System.out.println(allRects.size() + "sizeeeeeeeeeeeeeeeeeee");//TODO
                 for(SpeakingRect rect : allRects){
-                    System.out.println("id and rectname and rect loc--- "  + rect.getId()+ " " +  rect.getPicName() + " " + rect.getPoint());
+                    System.out.println("id and rectname and rect loc--- "  + rect.getId()+ " " +  rect.getPicName() + " " + rect.getRect().bottom + " is bottom");
                 }
                 //TODO update with view.post //TODO on a new thread get the db data then update it to view with post :) - may switch the operations - update 1st,get db 2nd
                 List<SpeakingRect> caters = rectDaoImpl.getAllRectsOfAPic(currentPicName);
