@@ -100,7 +100,7 @@ public class ImageViewMain extends Activity implements OnTouchListener {
             @Override
             public void run() {
 
-//                rectDaoImpl.deleteAll();//TODO clear all
+                rectDaoImpl.deleteAll();//TODO clear all
                 List<SpeakingRect> allRects = rectDaoImpl.getAllRects();
                 System.out.println(allRects.size() + "sizeeeeeeeeeeeeeeeeeee");//TODO
                 for(SpeakingRect rect : allRects){
