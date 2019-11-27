@@ -151,24 +151,6 @@ public class SpeakingRect {
         return this.paint.getAlpha();
     }
 
-//    /**
-//     * Checks if the new rect will be inside this one //TODO areRectanglesIntersecting does more work
-//     * @param point
-//     * @return
-//     */
-//    public boolean isPointInsideRect(Point point){
-//        return this.rect.contains(point.x,point.y);
-//    }
-
-//    /**
-//     * Checks if the new rect will be inside of this one //TODO areRectanglesIntersecting does more work
-//     * @param rect
-//     * @return
-//     */
-//    public boolean isRectInside(SpeakingRect rect){
-//        return this.rect.contains(rect.getRect());
-//    }
-
     /**
      * Is the new rect touching this one
      * @param newPoint
