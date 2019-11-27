@@ -151,6 +151,9 @@ public class SpeakingRect {
         return this.paint.getAlpha();
     }
 
+
+    //123 ggood test
+
     /**
      * Is the new rect touching this one
      * @param newPoint
