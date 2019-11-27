@@ -81,7 +81,7 @@ public class SpeakingRect {
 
     /**
      * 1-10
-     * @param thickness
+     * @param thickness rectangle border thickness
      */
     public void setBorderThickness(int thickness){
         this.paint.setStrokeWidth(thickness);
@@ -93,7 +93,7 @@ public class SpeakingRect {
 
     /**
      * Color.RED (example)
-     * @param color
+     * @param color the color number
      */
     public void setColor(int color){
         paint.setColor(color);
@@ -106,7 +106,7 @@ public class SpeakingRect {
 
     /**
      * 0-255
-     * @param alpha
+     * @param alpha transparency
      */
     public void setAlpha(int alpha) {
         this.paint.setAlpha(alpha);
@@ -118,9 +118,9 @@ public class SpeakingRect {
 
     /**
      * Is the new rect touching this one
-     * @param newPoint
-     * @param newSize
-     * @return
+     * @param newPoint //TODO redesign - will it use point or compare the 4 points of the 2 rects
+     * @param newSize - if upper is true this is not needed
+     * @return true if the 2 rectangles are touching (if not using point)
      */
     public boolean areRectanglesIntersecting(Point newPoint, int newSize){//TODO check for all 4 points
         if(//TODO check for out of bounds
