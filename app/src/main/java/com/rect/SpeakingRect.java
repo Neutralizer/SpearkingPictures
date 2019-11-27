@@ -20,32 +20,13 @@ public class SpeakingRect {
     @ColumnInfo(name = "rect_paint")
     private Paint paint;//TODO move paint in separate class ?
     @ColumnInfo(name = "internal_rect")
-    private Rect rect;//TODO extend rect and drop the point? could be useful for touch expanding the rect //drop ignore and store the whole rect with its 4 points inside
-//    @ColumnInfo(name = "point_location")
-//    private Point point;
-//    @ColumnInfo(name = "border_thickness")
-//    private int borderThickness;
-//    @ColumnInfo(name = "rect_size")//TODO will be dropped also if rect has 4 points persisted - move to where point to 4 rect side conversion will be - not in db?
-//    private int size;
-//    @ColumnInfo(name = "border_color")
-//    private int color;
-//    @ColumnInfo(name = "border_alpha")
-//    private int alpha;
+    private Rect rect;
 
     public SpeakingRect(int id, String picName, Rect rect, Paint paint) {
         this.id = id;
         this.picName = picName;
         this.paint = paint;
         this.rect = rect;
-//        this.borderThickness = 3;
-//        this.size = 50;
-//        this.color = Color.RED;
-//        this.alpha = 100;
-//        setRectPosition(this.point);//TODO change to 4 sides and transform from point to rect in the dao
-//        paint.setColor(this.color);
-//        paint.setStrokeWidth(borderThickness);
-//        paint.setAlpha(this.alpha);
-//        paint.setStyle(Paint.Style.STROKE);//TODO always with this
     }
 
 //    @Ignore
@@ -98,14 +79,6 @@ public class SpeakingRect {
         this.paint = paint;
     }
 
-    //    public Point getPoint() {
-//        return point;
-//    }
-//
-//    public void setPoint(Point point) {
-//        this.point = point;
-//    }
-
     /**
      * 1-10
      * @param thickness
@@ -117,14 +90,6 @@ public class SpeakingRect {
     public int getBorderThickness(){
         return (int) this.paint.getStrokeWidth();
     }
-
-//    public int getSize() {
-//        return size;
-//    }
-//
-//    public void setSize(int size) {
-//        this.size = size;
-//    }
 
     /**
      * Color.RED (example)
@@ -151,9 +116,6 @@ public class SpeakingRect {
         return this.paint.getAlpha();
     }
 
-
-    //123 ggood test
-
     /**
      * Is the new rect touching this one
      * @param newPoint
@@ -170,6 +132,5 @@ public class SpeakingRect {
         return false;
 
     }
-//ttt
 
 }
