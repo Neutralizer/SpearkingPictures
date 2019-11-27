@@ -5,6 +5,9 @@ import androidx.room.TypeConverter;
 
 import com.google.gson.Gson;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class PaintConverter {
 
@@ -13,7 +16,14 @@ public class PaintConverter {
         if(value == null){
             return new Paint();
         }
-        Paint paint = new Gson().fromJson(value,Paint.class);
+//        Paint paint = new Gson().fromJson(value,Paint.class);
+//        return paint;
+        List<String> list = Arrays.asList(value.split(","));
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Integer.parseInt(list.get(0)));
+        paint.setStrokeWidth(Float.parseFloat(list.get(1)));
+        paint.setAlpha(Integer.parseInt(list.get(2)));
         return paint;
     }
 
@@ -22,7 +32,9 @@ public class PaintConverter {
         if(value == null){
             return null;
         }
-        String json = new Gson().toJson(value);
-        return json;
+//        String json = new Gson().toJson(value);
+//        return json;
+        String result = value.getColor() + "," +  value.getStrokeWidth() + "," + value.getAlpha();
+        return result;
     }
 }

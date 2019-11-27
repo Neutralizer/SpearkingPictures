@@ -9,8 +9,8 @@ import androidx.room.TypeConverters;
 
 import com.rect.SpeakingRect;
 
-@Database(entities = SpeakingRect.class, exportSchema = false, version = 1)
-@TypeConverters({PointConverter.class, PaintConverter.class})
+@Database(entities = SpeakingRect.class, exportSchema = false, version = 3)
+@TypeConverters({RectConverter.class, PaintConverter.class})
 public abstract class RectDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "rect_db";
