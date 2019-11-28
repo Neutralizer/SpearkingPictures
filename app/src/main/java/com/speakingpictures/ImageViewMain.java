@@ -19,6 +19,7 @@ import android.widget.Button;
 import androidx.core.app.ActivityCompat;
 
 import com.dao.RectDaoImpl;
+import com.listeners.GListener;
 import com.rect.SpeakingRect;
 import com.speakingpictures.views.CustomImageView;
 import com.squareup.picasso.Picasso;
@@ -40,6 +41,7 @@ public class ImageViewMain extends Activity implements OnTouchListener {
     HoldNotifier holdObj = new HoldNotifier(300);
     CustomImageView customImageView;
     String currentPicName;
+    GListener gListener;
 
 
 
@@ -53,6 +55,7 @@ public class ImageViewMain extends Activity implements OnTouchListener {
         rectDaoImpl = new RectDaoImpl(this);//new
         final CustomImageView imgView =  findViewById(R.id.myimageID);
         imgView.setOnTouchListener(this);
+        gListener = new GListener(this);
 
         verifyStoragePermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
 
@@ -71,6 +74,12 @@ public class ImageViewMain extends Activity implements OnTouchListener {
 
         //TODO
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gListener.getGestureDetector().onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 
     private void showImage() {
