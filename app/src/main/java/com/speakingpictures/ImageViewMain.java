@@ -55,7 +55,7 @@ public class ImageViewMain extends Activity implements OnTouchListener {
         rectDaoImpl = new RectDaoImpl(this);//new
         final CustomImageView imgView =  findViewById(R.id.myimageID);
         imgView.setOnTouchListener(this);
-        gListener = new GListener(this);
+        gListener = new GListener(this,rectDaoImpl,imgView);
 
         verifyStoragePermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
 
@@ -155,10 +155,8 @@ public class ImageViewMain extends Activity implements OnTouchListener {
                             holdObj.setHeld(true);
                             //TODO execute hold code
                             final CustomImageView imgView = findViewById(R.id.myimageID);//TODO make this the only 1?
-                            rectDaoImpl.insertRect(currentPicName,imageViewClickPosition);
-
-
-                            setRectanglesInsideCustomView(imgView);
+//                            rectDaoImpl.insertRect(currentPicName,imageViewClickPosition);//TODO works
+//                            setRectanglesInsideCustomView(imgView);//TODO works
 
                             //TODO start audio recording
 
@@ -213,6 +211,7 @@ public class ImageViewMain extends Activity implements OnTouchListener {
             CustomImageView imageView = findViewById(R.id.myimageID);//TODO was imageview
             File file = new File(picturePath);
             currentPicName = file.getName();
+            gListener.setCurrentPicName(currentPicName);//TODO setter for picname in listener - should it stay this way
             Picasso.with(getApplicationContext()).load(file).fit().centerInside().into(imageView);
 
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
