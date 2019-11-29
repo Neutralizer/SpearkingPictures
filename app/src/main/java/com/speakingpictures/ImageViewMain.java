@@ -28,7 +28,9 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.List;
 
-public class ImageViewMain extends Activity implements OnTouchListener, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+public class ImageViewMain extends Activity implements OnTouchListener
+//        , GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener
+{
 
 
     private static int RESULT_LOAD_IMAGE = 1;
@@ -55,9 +57,9 @@ public class ImageViewMain extends Activity implements OnTouchListener, GestureD
         customImageView = new CustomImageView(this);
         rectDaoImpl = new RectDaoImpl(this);//new
         final CustomImageView imgView =  findViewById(R.id.myimageID);
-        imgView.setOnTouchListener(this); // TODO wants to override performClick
-        gestureDetector = new GestureDetector(this,this);
-//        gestureDetector.setOnDoubleTapListener(this);//sets the listener for gesturedetector
+//        imgView.setOnTouchListener(this); // TODO wants to override performClick
+//        gestureDetector = new GestureDetector(this,this);
+//        gestureDetector.setOnDoubleTapListener(this);//sets the listener for gesturedetector not working
 
         verifyStoragePermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
 
@@ -76,86 +78,86 @@ public class ImageViewMain extends Activity implements OnTouchListener, GestureD
 
     }
 
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        return true;
-    }
-
-    @Override
-    public boolean onDoubleTap(MotionEvent motionEvent) {//TODO detects outside of view where point is blank
-        System.out.println("doubletapping");
-        final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
-        final CustomImageView imgView =  findViewById(R.id.myimageID);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                rectDaoImpl.deleteRect(currentPicName,imageViewClickPosition);
-                Log.d("glistener", "it is doubletapping");
-                setRectanglesInsideCustomView(imgView);
-            }
-        }).start();
-        return true;
-    }
-
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-        return true;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent motionEvent) {
-        return true;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent motionEvent) {
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent motionEvent) {
-        return true;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return true;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent motionEvent) {
-        System.out.println("longpressing");
-        final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
-        final CustomImageView imgView =  findViewById(R.id.myimageID);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                rectDaoImpl.insertRect(currentPicName,imageViewClickPosition);
-                Log.d("onlongpress", "it is longpressing");
-                setRectanglesInsideCustomView(imgView);
-            }
-        }).start();
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return true;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if(gestureDetector.onTouchEvent(event)){
-            return true;//TODO return true in android dev
-        }
-        return super.onTouchEvent(event);
-    }
+//    @Override
+//    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onDoubleTap(MotionEvent motionEvent) {//TODO detects outside of view where point is blank
+//        System.out.println("doubletapping");
+//        final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
+//        final CustomImageView imgView =  findViewById(R.id.myimageID);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                rectDaoImpl.deleteRect(currentPicName,imageViewClickPosition);
+//                Log.d("glistener", "it is doubletapping");
+//                setRectanglesInsideCustomView(imgView);
+//            }
+//        }).start();
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onDown(MotionEvent motionEvent) {
+//        return true;
+//    }
+//
+//    @Override
+//    public void onShowPress(MotionEvent motionEvent) {
+//    }
+//
+//    @Override
+//    public boolean onSingleTapUp(MotionEvent motionEvent) {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+//        return true;
+//    }
+//
+//    @Override
+//    public void onLongPress(MotionEvent motionEvent) {
+//        System.out.println("longpressing");
+//        final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
+//        final CustomImageView imgView =  findViewById(R.id.myimageID);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                rectDaoImpl.insertRect(currentPicName,imageViewClickPosition);
+//                Log.d("onlongpress", "it is longpressing");
+//                setRectanglesInsideCustomView(imgView);
+//            }
+//        }).start();
+//
+//    }
+//
+//    @Override
+//    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if(gestureDetector.onTouchEvent(event)){
+//            return true;//TODO return true in android dev
+//        }
+//        return super.onTouchEvent(event);
+//    }
 
     private void setRectanglesInsideCustomView(final CustomImageView imgView) {//TODO make CustomImageView internal - it will not change (maybe with the gridview adapter)
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                rectDaoImpl.deleteAll();//TODO clear all
+//                rectDaoImpl.deleteAll();//TODO clear all
                 List<SpeakingRect> allRects = rectDaoImpl.getAllRects();
                 System.out.println(allRects.size() + "sizeeeeeeeeeeeeeeeeeee");//TODO
                 for(SpeakingRect rect : allRects){
