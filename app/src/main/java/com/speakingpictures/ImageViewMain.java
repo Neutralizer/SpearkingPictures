@@ -11,6 +11,8 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.*;
@@ -19,7 +21,6 @@ import android.widget.Button;
 import androidx.core.app.ActivityCompat;
 
 import com.dao.RectDaoImpl;
-import com.listeners.GListener;
 import com.rect.SpeakingRect;
 import com.speakingpictures.views.CustomImageView;
 import com.squareup.picasso.Picasso;
@@ -27,7 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.List;
 
-public class ImageViewMain extends Activity implements OnTouchListener {
+public class ImageViewMain extends Activity implements OnTouchListener, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
 
     private static int RESULT_LOAD_IMAGE = 1;
@@ -41,7 +42,7 @@ public class ImageViewMain extends Activity implements OnTouchListener {
     HoldNotifier holdObj = new HoldNotifier(300);
     CustomImageView customImageView;
     String currentPicName;
-    GListener gListener;
+    GestureDetector gestureDetector;
 
 
 
@@ -54,8 +55,9 @@ public class ImageViewMain extends Activity implements OnTouchListener {
         customImageView = new CustomImageView(this);
         rectDaoImpl = new RectDaoImpl(this);//new
         final CustomImageView imgView =  findViewById(R.id.myimageID);
-        imgView.setOnTouchListener(this);
-        gListener = new GListener(this,rectDaoImpl,imgView);
+        imgView.setOnTouchListener(this); // TODO wants to override performClick
+        gestureDetector = new GestureDetector(this,this);
+//        gestureDetector.setOnDoubleTapListener(this);//sets the listener for gesturedetector
 
         verifyStoragePermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
 
@@ -72,38 +74,80 @@ public class ImageViewMain extends Activity implements OnTouchListener {
             }
         });
 
-        //TODO
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent motionEvent) {//TODO detects outside of view where point is blank
+        System.out.println("doubletapping");
+        final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
+        final CustomImageView imgView =  findViewById(R.id.myimageID);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                rectDaoImpl.deleteRect(currentPicName,imageViewClickPosition);
+                Log.d("glistener", "it is doubletapping");
+                setRectanglesInsideCustomView(imgView);
+            }
+        }).start();
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+        return true;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return true;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+        System.out.println("longpressing");
+        final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
+        final CustomImageView imgView =  findViewById(R.id.myimageID);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                rectDaoImpl.insertRect(currentPicName,imageViewClickPosition);
+                Log.d("onlongpress", "it is longpressing");
+                setRectanglesInsideCustomView(imgView);
+            }
+        }).start();
 
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gListener.getGestureDetector().onTouchEvent(event);
-        return super.onTouchEvent(event);
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return true;
     }
 
-    private void showImage() {
-
-        final CustomImageView imgView =  findViewById(R.id.myimageID);
-        imgView.post(new Runnable() {//TODO protip - can't access db from this thread
-            @Override
-            public void run() {
-//                imgView.setImageResource(mImageIds[image_index]);//TODO old img loading
-                @SuppressLint({"NewApi", "LocalSuppress"}) int maxWidth = imgView.getWidth();
-                @SuppressLint({"NewApi", "LocalSuppress"}) int maxHeight = imgView.getHeight();
-                System.out.println("max: " + maxWidth + " " + maxHeight );
-
-
-
-            }
-        });
-
-        setRectanglesInsideCustomView(imgView);
-
-        System.out.println("image shown");//TODO
-
-
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(gestureDetector.onTouchEvent(event)){
+            return true;//TODO return true in android dev
+        }
+        return super.onTouchEvent(event);
     }
 
     private void setRectanglesInsideCustomView(final CustomImageView imgView) {//TODO make CustomImageView internal - it will not change (maybe with the gridview adapter)
@@ -111,7 +155,7 @@ public class ImageViewMain extends Activity implements OnTouchListener {
             @Override
             public void run() {
 
-//                rectDaoImpl.deleteAll();//TODO clear all
+                rectDaoImpl.deleteAll();//TODO clear all
                 List<SpeakingRect> allRects = rectDaoImpl.getAllRects();
                 System.out.println(allRects.size() + "sizeeeeeeeeeeeeeeeeeee");//TODO
                 for(SpeakingRect rect : allRects){
@@ -211,7 +255,6 @@ public class ImageViewMain extends Activity implements OnTouchListener {
             CustomImageView imageView = findViewById(R.id.myimageID);//TODO was imageview
             File file = new File(picturePath);
             currentPicName = file.getName();
-            gListener.setCurrentPicName(currentPicName);//TODO setter for picname in listener - should it stay this way
             Picasso.with(getApplicationContext()).load(file).fit().centerInside().into(imageView);
 
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
