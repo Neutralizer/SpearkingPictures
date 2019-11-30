@@ -18,12 +18,7 @@ import java.util.List;
 
 
 @SuppressLint("AppCompatCustomView")
-public class CustomImageView extends ImageView implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener
-{
-    GestureDetector gestureDetector = new GestureDetector(getContext(),this);
-//    {
-//        gestureDetector.setOnDoubleTapListener(this);
-//    }
+public class CustomImageView extends ImageView {
 
     List<SpeakingRect> rectList = new ArrayList<>();
 
@@ -60,7 +55,7 @@ public class CustomImageView extends ImageView implements GestureDetector.OnGest
     }
 
     @Override
-    public void onDraw(Canvas canvas) {//TODO just display the rects of the pic
+    public void onDraw(Canvas canvas) {//display the rects of the pic
         super.onDraw(canvas);
 
             for (SpeakingRect rect : rectList){
@@ -69,84 +64,4 @@ public class CustomImageView extends ImageView implements GestureDetector.OnGest
 //        }
     }
 
-
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        return true;
-    }
-
-    @Override
-    public boolean onDoubleTap(MotionEvent motionEvent) {//TODO detects outside of view where point is blank
-        System.out.println("doubletapping");
-        final Point imageViewClickPosition = getImageViewClickPosition(motionEvent);
-        final CustomImageView imgView =  findViewById(R.id.myimageID);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-//                rectDaoImpl.deleteRect(currentPicName,imageViewClickPosition);
-                Log.d("glistener", "it is doubletapping");
-//                setRectanglesInsideCustomView(imgView);
-            }
-        }).start();
-        return true;
-    }
-
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-        return true;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent motionEvent) {
-        return true;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent motionEvent) {
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent motionEvent) {
-        return true;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return true;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent motionEvent) {
-        System.out.println("longpressing");
-        final Point imageViewClickPosition = getImageViewClickPosition(motionEvent);
-        final CustomImageView imgView =  findViewById(R.id.myimageID);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-//                rectDaoImpl.insertRect(currentPicName,imageViewClickPosition);
-                Log.d("onlongpress", "it is longpressing");
-//                setRectanglesInsideCustomView(imgView);
-            }
-        }).start();
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return true;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if(gestureDetector.onTouchEvent(event)){
-            return true;//does not trigger action_up without this
-        }
-
-        if(event.getAction() == MotionEvent.ACTION_UP){
-            System.out.println("RELEASE THE CKRACKCEN");
-        }
-
-
-        return super.onTouchEvent(event);
-    }
 }
