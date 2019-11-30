@@ -1,7 +1,6 @@
 package com.speakingpictures;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,7 +14,6 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.*;
 import android.widget.Button;
 
 import androidx.core.app.ActivityCompat;
@@ -41,7 +39,7 @@ public class ImageViewMain extends Activity implements
 
     RectDaoImpl rectDaoImpl;
     HoldNotifier holdObj = new HoldNotifier(300);
-    CustomImageView customImageView;
+    CustomImageView customImageViewObj;
     String currentPicName;
     GestureDetector gestureDetector;
 
@@ -53,7 +51,7 @@ public class ImageViewMain extends Activity implements
         setContentView(R.layout.activity_main);
 
 
-        customImageView = new CustomImageView(this);
+        customImageViewObj = new CustomImageView(this);
         rectDaoImpl = new RectDaoImpl(this);//new
         final CustomImageView imgView =  findViewById(R.id.myimageID);
         gestureDetector = new GestureDetector(this,this);
@@ -83,7 +81,7 @@ public class ImageViewMain extends Activity implements
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {//TODO detects outside of view where point is blank
         System.out.println("doubletapping");
-        final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
+        final Point imageViewClickPosition = customImageViewObj.getImageViewClickPosition(motionEvent);
         final CustomImageView imgView =  findViewById(R.id.myimageID);
         new Thread(new Runnable() {
             @Override
@@ -122,9 +120,12 @@ public class ImageViewMain extends Activity implements
 
     @Override
     public void onLongPress(MotionEvent motionEvent) {
+        //TODO start recording in new thread
+        //TODO tell visually with red hue that it is recording
+        //get pic coords and create button/save button //rect
         System.out.println("longpressing");
         holdObj.setHeld(true);
-        final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
+        final Point imageViewClickPosition = customImageViewObj.getImageViewClickPosition(motionEvent);
         final CustomImageView imgView =  findViewById(R.id.myimageID);
         new Thread(new Runnable() {
             @Override
@@ -150,6 +151,7 @@ public class ImageViewMain extends Activity implements
 
         if(event.getAction() == MotionEvent.ACTION_UP && holdObj.isHeld()){//TODO use holdObj here to stop recording only after longpress
             System.out.println("RELEASE THE CKRACKCEN");//TODO
+            //TODO stop the recording thread and save audiofile //TODO save button coordinates and audio
             holdObj.setHeld(false);
         }
         return super.onTouchEvent(event);
@@ -166,79 +168,13 @@ public class ImageViewMain extends Activity implements
                 for(SpeakingRect rect : allRects){
                     System.out.println("id and rectname and rect loc--- "  + rect.getId()+ " " +  rect.getPicName() + " " + rect.getRect().bottom + " is bottom");
                 }
-                //TODO update with view.post //TODO on a new thread get the db data then update it to view with post :) - may switch the operations - update 1st,get db 2nd
-                List<SpeakingRect> caters = rectDaoImpl.getAllRectsOfAPic(currentPicName);
-                imgView.setRectList(caters);
+                List<SpeakingRect> list = rectDaoImpl.getAllRectsOfAPic(currentPicName);
+                imgView.setRectList(list);
                 imgView.postInvalidate();
             }
 
         }).start();
     }
-
-  /*  @Override
-    public boolean onTouch(View v, MotionEvent motionEvent) {
-        if(currentPicName == null){ return false; }//block touch events when no pic is loaded
-
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN: //click
-                //TODO start recording in new thread
-                //TODO tell visually with red hue that it is recording
-                //TODO get pic coords and create button/save button //rect
-                System.out.println("action down");//TODO
-                holdObj.isPressed();
-
-                final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        try {
-                            Thread.sleep(holdObj.getHoldDuration());
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (holdObj.getIsPressed()) {
-                            System.out.println("it is a hold");
-                            holdObj.setHeld(true);
-                            //TODO execute hold code
-                            final CustomImageView imgView = findViewById(R.id.myimageID);//TODO make this the only 1?
-//                            rectDaoImpl.insertRect(currentPicName,imageViewClickPosition);//TODO works
-//                            setRectanglesInsideCustomView(imgView);//TODO works
-
-                            //TODO start audio recording
-
-
-
-
-                        }
-
-                    }
-                }).start();
-
-
-
-
-
-                return true;
-            case MotionEvent.ACTION_UP: //release
-
-                if(holdObj.isHeld()){
-                    //TODO release a hold
-                }
-                //TODO stop the recording thread and save audiofile //TODO save button coordinates and audio
-
-                //TODO update prop file
-                System.out.println("action up");//TODO
-                holdObj.holdReleased();//TODO should be released in any case
-
-
-                return true;
-        }
-
-        return false;
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -257,7 +193,7 @@ public class ImageViewMain extends Activity implements
             cursor.close();
 
 
-            CustomImageView imageView = findViewById(R.id.myimageID);//TODO was imageview
+            CustomImageView imageView = findViewById(R.id.myimageID);
             File file = new File(picturePath);
             currentPicName = file.getName();
             Picasso.with(getApplicationContext()).load(file).fit().centerInside().into(imageView);
