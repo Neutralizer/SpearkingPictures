@@ -29,7 +29,6 @@ import java.io.File;
 import java.util.List;
 
 public class ImageViewMain extends Activity implements
-//        OnTouchListener,
         GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
 
@@ -57,9 +56,7 @@ public class ImageViewMain extends Activity implements
         customImageView = new CustomImageView(this);
         rectDaoImpl = new RectDaoImpl(this);//new
         final CustomImageView imgView =  findViewById(R.id.myimageID);
-//        imgView.setOnTouchListener(this); // TODO wants to override performClick
         gestureDetector = new GestureDetector(this,this);
-//        gestureDetector.setOnDoubleTapListener(this);//sets the listener for gesturedetector not working
 
         verifyStoragePermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
 
@@ -126,6 +123,7 @@ public class ImageViewMain extends Activity implements
     @Override
     public void onLongPress(MotionEvent motionEvent) {
         System.out.println("longpressing");
+        holdObj.setHeld(true);
         final Point imageViewClickPosition = customImageView.getImageViewClickPosition(motionEvent);
         final CustomImageView imgView =  findViewById(R.id.myimageID);
         new Thread(new Runnable() {
@@ -150,8 +148,9 @@ public class ImageViewMain extends Activity implements
             return true;//does not trigger action_up without this
         }
 
-        if(event.getAction() == MotionEvent.ACTION_UP){
+        if(event.getAction() == MotionEvent.ACTION_UP && holdObj.isHeld()){//TODO use holdObj here to stop recording only after longpress
             System.out.println("RELEASE THE CKRACKCEN");//TODO
+            holdObj.setHeld(false);
         }
         return super.onTouchEvent(event);
     }
