@@ -198,7 +198,7 @@ public class ImageViewMain extends Activity implements
             currentPicName = file.getName();
             Picasso.with(getApplicationContext()).load(file).fit().centerInside().into(imageView);
 
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));//not needed
             setRectanglesInsideCustomView(imageView);
 
 
