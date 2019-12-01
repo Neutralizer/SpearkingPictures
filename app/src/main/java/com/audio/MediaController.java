@@ -38,6 +38,11 @@ public class MediaController {
         }
     }
 
+    public String getPathSave(String picName, Rect rect){
+        String temp = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + picName + rect.left + rect.top + rect.right + rect.bottom + ".3gp";
+        return temp;
+    }
+
     public void startRecording(String picName, Rect rect) {
         if (picName == null || rect == null) {
             return;
@@ -59,21 +64,21 @@ public class MediaController {
         mediaRecorder.stop();
     }
 
-    public void playSound() {//TODO make it stop playing the prev sound
+    public void playSound() {//TODO pass the audio save location
         if (mediaPlayer != null) {
             stopSound();
+            mediaPlayer = null;//TODO user stops other playing sound, but wants to play this one now - test
         }
 
         mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(pathSave);
+            mediaPlayer.setDataSource(pathSave);//TODO this will work only for 1 file
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
         mediaPlayer.start();
 
-        //
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {

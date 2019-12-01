@@ -90,9 +90,11 @@ public class ImageViewMain extends Activity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
-                rectDaoImpl.deleteRect(currentPicName,imageViewClickPosition);
+                SpeakingRect speakingRect = rectDaoImpl.deleteRect(currentPicName, imageViewClickPosition);
                 Log.d("glistener", "it is doubletapping");
                 setRectanglesInsideCustomView(imgView);
+                //TODO delete audiofile when deleting rect
+
             }
         }).start();
         return true;
@@ -138,7 +140,7 @@ public class ImageViewMain extends Activity implements
                 Log.d("onlongpress", "it is longpressing");
                 setRectanglesInsideCustomView(imgView);
 
-                mediaController.startRecording(currentPicName,speakingRect.getRect());//TODO check if thre rect is added and then start recording
+                mediaController.startRecording(currentPicName,speakingRect.getRect());
             }
         }).start();
 

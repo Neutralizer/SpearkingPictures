@@ -78,14 +78,16 @@ public class RectDaoImpl {
         appDb.rectDao().deleteAllRectsOfAPic(picName);
     }
 
-    public void deleteRect(String picName, Point point){//TODO maybe get the rect to be removed from the array in customimageview
+    public SpeakingRect deleteRect(String picName, Point point){
         List<SpeakingRect> allRectsOfAPic = getAllRectsOfAPic(picName);
         for(SpeakingRect rectangle : allRectsOfAPic){
             if (rectangle.getRect().contains(point.x, point.y)) {
                 appDb.rectDao().deleteRect(picName, rectangle.getRect());
+                return rectangle;
             }
         }
 
+        return null;
     }
 
     public void deleteAll(){
