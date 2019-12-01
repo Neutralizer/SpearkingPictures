@@ -78,8 +78,16 @@ public class ImageViewMain extends Activity implements
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
         //play //TODO get the touched rect and input its coords
         //TODO in delete method the touched rect is selected - get it the same way - maybe save it by 4 sides, not by point
-        mediaController.playSound(); // TODO start playing in new thread and when it is finished - stop playing from that thread - may not be able to stop
-        return true;
+        final Point imageViewClickPosition = customImageViewObj.getImageViewClickPosition(motionEvent);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SpeakingRect sRect = rectDaoImpl.getRect(currentPicName, imageViewClickPosition);
+                mediaController.playSound(currentPicName,sRect.getRect()); // TODO start playing in new thread and when it is finished - stop playing from that thread - may not be able to stop
+
+            }
+        }).start();
+        return true;//get the touched rect and give its coords to the mediacontroller to play this spesific rect's sounds
     }
 
     @Override
@@ -94,6 +102,7 @@ public class ImageViewMain extends Activity implements
                 Log.d("glistener", "it is doubletapping");
                 setRectanglesInsideCustomView(imgView);
                 //TODO delete audiofile when deleting rect
+                mediaController.deleteAudioFile(currentPicName,speakingRect.getRect());
 
             }
         }).start();

@@ -10,13 +10,14 @@ import android.os.Environment;
 
 import androidx.core.app.ActivityCompat;
 
+import java.io.File;
 import java.io.IOException;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 
 public class MediaController {
 
-    private String pathSave = "";
+//    private String pathSave = "";
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
 
@@ -38,18 +39,16 @@ public class MediaController {
         }
     }
 
-    public String getPathSave(String picName, Rect rect){
-        String temp = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + picName + rect.left + rect.top + rect.right + rect.bottom + ".3gp";
-        return temp;
-    }
+
 
     public void startRecording(String picName, Rect rect) {
         if (picName == null || rect == null) {
             return;
         }
-        pathSave = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + picName + rect.left + rect.top + rect.right + rect.bottom + ".3gp";
+//        String pathForSave = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + picName + rect.left + rect.top + rect.right + rect.bottom + ".3gp";
+        String pathForSave = reconstructPathSave(picName, rect);
 
-        setupMediaRecorder();
+        setupMediaRecorder(pathForSave);
 
         try {
             mediaRecorder.prepare();
@@ -64,7 +63,12 @@ public class MediaController {
         mediaRecorder.stop();
     }
 
-    public void playSound() {//TODO pass the audio save location
+    private String reconstructPathSave(String picName, Rect rect){
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + picName + rect.left + rect.top + rect.right + rect.bottom + ".3gp";
+
+    }
+
+    public void playSound(String picName, Rect rect) {//TODO pass the audio save location
         if (mediaPlayer != null) {
             stopSound();
             mediaPlayer = null;//TODO user stops other playing sound, but wants to play this one now - test
@@ -72,7 +76,9 @@ public class MediaController {
 
         mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(pathSave);//TODO this will work only for 1 file
+            String pathForSave = reconstructPathSave(picName, rect);
+
+            mediaPlayer.setDataSource(pathForSave);//TODO this will work only for 1 file
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,13 +101,30 @@ public class MediaController {
     }
 
 
-    private void setupMediaRecorder() {
+    private void setupMediaRecorder(String pathForSave) {
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        mediaRecorder.setOutputFile(pathSave);
+        mediaRecorder.setOutputFile(pathForSave);
     }
 
 
+    public void deleteAudioFile(String picName, Rect rect) {
+        if (picName == null || rect == null) {
+            return;
+        }
+
+        String pathForSave = reconstructPathSave(picName, rect);
+        File file = new File(pathForSave);
+        boolean delete = file.delete();
+        if (!delete){
+            try {
+                throw new IOException("Could not delete " + file.getName() + " located in " + pathForSave);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }
