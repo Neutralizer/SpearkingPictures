@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.audio.MediaController;
 import com.dao.RectDaoImpl;
@@ -32,10 +33,6 @@ public class ImageViewMain extends Activity implements
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
 
     RectDaoImpl rectDaoImpl;
     HoldNotifier holdObj = new HoldNotifier(300);
@@ -57,7 +54,7 @@ public class ImageViewMain extends Activity implements
         final CustomImageView imgView =  findViewById(R.id.myimageID);
         gestureDetector = new GestureDetector(this,this);
         mediaController = new MediaController(this);
-        verifyStoragePermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
+        verifyPermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
         //TODO permission problem
         Button buttonLoadImage = (Button) findViewById(R.id.buttonLoadPicture);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
@@ -233,15 +230,38 @@ public class ImageViewMain extends Activity implements
      *
      * @param activity
      */
-    public static void verifyStoragePermissions(Activity activity) {//TODO check for other permissions also //TODO move to separate class
-        // Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);//WAS WRITE TODO
+    public static void verifyPermissions(Activity activity) {
+        // Check if we have permission
+        int permissionStorage = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionAudio = ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO);
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
+
+        if (permissionStorage != PackageManager.PERMISSION_GRANTED && permissionAudio != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(
                     activity,
-                    PERMISSIONS_STORAGE,
+            new String[] {
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.RECORD_AUDIO
+            },
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        } else if(permissionStorage != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                    activity,
+                    new String[] {
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    },
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        } else if(permissionAudio != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                    activity,
+                    new String[] {
+                            Manifest.permission.RECORD_AUDIO
+                    },
                     REQUEST_EXTERNAL_STORAGE
             );
         }

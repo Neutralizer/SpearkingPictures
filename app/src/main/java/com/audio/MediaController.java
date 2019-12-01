@@ -17,16 +17,15 @@ import static android.Manifest.permission.RECORD_AUDIO;
 
 public class MediaController {
 
-//    private String pathSave = "";
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
 
     public MediaController(Activity activity) {
-        verifyRecordPermissions(activity);
+//        verifyRecordPermissions(activity);
     }
 
-    private void verifyRecordPermissions(Activity activity) {//TODO remember permission might not work
-        // Check if we have write permission
+    private void verifyRecordPermissions(Activity activity) {
+        // Check if we have mic permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO);
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -78,7 +77,7 @@ public class MediaController {
         try {
             String pathForSave = reconstructPathSave(picName, rect);
 
-            mediaPlayer.setDataSource(pathForSave);//TODO this will work only for 1 file
+            mediaPlayer.setDataSource(pathForSave);//TODO this will work only for 1 file - not anymore
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
