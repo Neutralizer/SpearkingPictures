@@ -1,64 +1,50 @@
-package com.speakingpictures;
+package com.audio;
 
 import android.Manifest;
-import android.Manifest.permission;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
 
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 
 public class MediaController {
-
-    private final int REQUEST_PERMISSION_CODE = 1000;
 
     private String pathSave = "";
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
 
     public MediaController(Activity activity) {
-        //TODO  check permission here
-        if(checkPermissionFromDevice(activity)){
-            requestPermission(activity);
+        verifyRecordPermissions(activity);
+    }
+
+    private void verifyRecordPermissions(Activity activity) {//TODO remember permission might not work
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            int REQUEST_PERMISSION_CODE = 1000;
+            ActivityCompat.requestPermissions(
+                    activity, new String[]{RECORD_AUDIO},
+                    REQUEST_PERMISSION_CODE
+            );
         }
     }
 
-    private void requestPermission(Activity activity) {
-        ActivityCompat.requestPermissions(activity, new String[]{
-                WRITE_EXTERNAL_STORAGE,
-                RECORD_AUDIO
-        }, REQUEST_PERMISSION_CODE);
-
-    }
-
-    private boolean checkPermissionFromDevice(Activity activity) {//TODO combine with main method permission check
-        int writeExternalStorageResult = ContextCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE);
-        int recordAudioResult = ContextCompat.checkSelfPermission(activity, RECORD_AUDIO);
-
-        if (writeExternalStorageResult == PackageManager.PERMISSION_GRANTED && recordAudioResult == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
-    public void startRecording(String picName, Rect rect){
-        if(picName == null || rect == null){
+    public void startRecording(String picName, Rect rect) {
+        if (picName == null || rect == null) {
             return;
         }
         pathSave = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + picName + rect.left + rect.top + rect.right + rect.bottom + ".3gp";
-        //TODO save them
 
-        setupMediaRecorder();//TODO check where this should be
+        setupMediaRecorder();
 
         try {
             mediaRecorder.prepare();
@@ -69,13 +55,12 @@ public class MediaController {
     }
 
 
-
-    public void stopRecording(){
+    public void stopRecording() {
         mediaRecorder.stop();
     }
 
-    public void playSound(){//TODO make it stop playing the prev sound
-        if(mediaPlayer != null){
+    public void playSound() {//TODO make it stop playing the prev sound
+        if (mediaPlayer != null) {
             stopSound();
         }
 
@@ -97,13 +82,12 @@ public class MediaController {
         });
     }
 
-    private void stopSound(){
-        if(mediaPlayer != null){
+    private void stopSound() {
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
     }
-
 
 
     private void setupMediaRecorder() {

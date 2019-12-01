@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +17,7 @@ import android.widget.Button;
 
 import androidx.core.app.ActivityCompat;
 
+import com.audio.MediaController;
 import com.dao.RectDaoImpl;
 import com.rect.SpeakingRect;
 import com.speakingpictures.views.CustomImageView;
