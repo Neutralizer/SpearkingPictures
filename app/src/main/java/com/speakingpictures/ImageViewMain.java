@@ -31,8 +31,8 @@ public class ImageViewMain extends Activity implements
 
 
     private static int RESULT_LOAD_IMAGE = 1;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;//TODO TEMP
-    private static String[] PERMISSIONS_STORAGE = {//TODO TEMP
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -42,6 +42,7 @@ public class ImageViewMain extends Activity implements
     CustomImageView customImageViewObj;
     String currentPicName;
     GestureDetector gestureDetector;
+    MediaController mediaController;
 
 
 
@@ -55,9 +56,9 @@ public class ImageViewMain extends Activity implements
         rectDaoImpl = new RectDaoImpl(this);//new
         final CustomImageView imgView =  findViewById(R.id.myimageID);
         gestureDetector = new GestureDetector(this,this);
-
+        mediaController = new MediaController(this);
         verifyStoragePermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
-
+        //TODO permission problem
         Button buttonLoadImage = (Button) findViewById(R.id.buttonLoadPicture);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
 
@@ -75,6 +76,9 @@ public class ImageViewMain extends Activity implements
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+        //play //TODO get the touched rect and input its coords
+        //TODO in delete method the touched rect is selected - get it the same way - maybe save it by 4 sides, not by point
+        mediaController.playSound(); // TODO start playing in new thread and when it is finished - stop playing from that thread - may not be able to stop
         return true;
     }
 
@@ -130,9 +134,11 @@ public class ImageViewMain extends Activity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
-                rectDaoImpl.insertRect(currentPicName,imageViewClickPosition);
+                SpeakingRect speakingRect = rectDaoImpl.insertRect(currentPicName,imageViewClickPosition);
                 Log.d("onlongpress", "it is longpressing");
                 setRectanglesInsideCustomView(imgView);
+
+                mediaController.startRecording(currentPicName,speakingRect.getRect());//TODO check if thre rect is added and then start recording
             }
         }).start();
 
@@ -152,6 +158,7 @@ public class ImageViewMain extends Activity implements
         if(event.getAction() == MotionEvent.ACTION_UP && holdObj.isHeld()){//TODO use holdObj here to stop recording only after longpress
             System.out.println("RELEASE THE CKRACKCEN");//TODO
             //TODO stop the recording thread and save audiofile //TODO save button coordinates and audio
+            mediaController.stopRecording();
             holdObj.setHeld(false);
         }
         return super.onTouchEvent(event);
