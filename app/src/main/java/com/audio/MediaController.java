@@ -68,10 +68,10 @@ public class MediaController {
     }
 
     public void playSound(String picName, Rect rect) {//TODO pass the audio save location
-        if (mediaPlayer != null) {
-            stopSound();
-            mediaPlayer = null;//TODO user stops other playing sound, but wants to play this one now - test
-        }
+//        if (mediaPlayer != null) {
+//            stopSound();
+//            mediaPlayer = null;//TODO user stops other playing sound, but wants to play this one now - test
+//        }
 
         mediaPlayer = new MediaPlayer();
         try {
