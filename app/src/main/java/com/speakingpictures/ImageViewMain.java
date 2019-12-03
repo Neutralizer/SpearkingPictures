@@ -98,7 +98,7 @@ public class ImageViewMain extends Activity implements
                 SpeakingRect speakingRect = rectDaoImpl.deleteRect(currentPicName, imageViewClickPosition);
                 Log.d("glistener", "it is doubletapping");
                 setRectanglesInsideCustomView(imgView);
-                //TODO delete audiofile when deleting rect
+                //TODO delete audiofile when deleting rect - check if it works
                 mediaController.deleteAudioFile(currentPicName,speakingRect.getRect());
 
             }
@@ -230,7 +230,7 @@ public class ImageViewMain extends Activity implements
      *
      * @param activity
      */
-    public static void verifyPermissions(Activity activity) {
+    public static void verifyPermissions(Activity activity) {//TODO move to permissionManager class
         // Check if we have permission
         int permissionStorage = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int permissionAudio = ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO);
