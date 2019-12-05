@@ -80,7 +80,9 @@ public class ImageViewMain extends Activity implements
             @Override
             public void run() {
                 SpeakingRect sRect = rectDaoImpl.getRect(currentPicName, imageViewClickPosition);
-                mediaController.playSound(currentPicName,sRect.getRect()); // TODO start playing in new thread and when it is finished - stop playing from that thread - may not be able to stop
+                if(sRect != null){
+                    mediaController.playSound(currentPicName,sRect.getRect()); // TODO start playing in new thread and when it is finished - stop playing from that thread - may not be able to stop
+                }
 
             }
         }).start();
