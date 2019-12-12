@@ -53,7 +53,7 @@ public class RectDaoImpl {
         return appDb.rectDao().getRect(picName, rect);
     }
 
-    public Rect getRect(String picName, Point point){//TODO return rect or speakingRect - null check
+    public Rect getRect(String picName, Point point){//TODO return rect or speakingRect - null check - to pass to media class for playback
         List<SpeakingRect> allRectsOfAPic = getAllRectsOfAPic(picName);
         for(SpeakingRect rectangle : allRectsOfAPic){
             if (rectangle.getRect().contains(point.x, point.y)) {
@@ -95,7 +95,7 @@ public class RectDaoImpl {
      * @param point the point that is clicked - if there is a rectangle there - it will be deleted
      * @return inner Rect that is removed
      */
-    public Rect deleteRect(String picName, Point point){//TODO return rect or speakingRect - null check
+    public Rect deleteRect(String picName, Point point){//TODO return rect or speakingRect - null check to pass to media class for deletion
         List<SpeakingRect> allRectsOfAPic = getAllRectsOfAPic(picName);
         for(SpeakingRect rectangle : allRectsOfAPic){
             if (rectangle.getRect().contains(point.x, point.y)) {
