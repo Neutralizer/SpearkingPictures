@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -79,10 +80,8 @@ public class ImageViewMain extends Activity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
-                SpeakingRect sRect = rectDaoImpl.getRect(currentPicName, imageViewClickPosition);
-                if(sRect != null){
-                    mediaController.playSound(currentPicName,sRect.getRect()); // TODO start playing in new thread and when it is finished - stop playing from that thread - may not be able to stop
-                }
+                Rect rect = rectDaoImpl.getRect(currentPicName, imageViewClickPosition);
+                mediaController.playSound(currentPicName,rect); // TODO start playing in new thread and when it is finished - stop playing from that thread - may not be able to stop
 
             }
         }).start();
@@ -97,11 +96,11 @@ public class ImageViewMain extends Activity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
-                SpeakingRect speakingRect = rectDaoImpl.deleteRect(currentPicName, imageViewClickPosition);
+                Rect rect = rectDaoImpl.deleteRect(currentPicName, imageViewClickPosition);
                 Log.d("glistener", "it is doubletapping");
                 setRectanglesInsideCustomView(imgView);
                 //TODO delete audiofile when deleting rect - check if it works
-                mediaController.deleteAudioFile(currentPicName,speakingRect.getRect());
+                mediaController.deleteAudioFile(currentPicName,rect);
 
             }
         }).start();

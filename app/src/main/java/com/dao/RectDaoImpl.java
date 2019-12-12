@@ -35,7 +35,7 @@ public class RectDaoImpl {
 
     /**
      * System.out.println("Alpha " + caters.get(0).getAlpha() + " Alpha from paint " +caters.get(0).getPaint().getAlpha() );
-     * //TODO due to room persistence not able to hold objects, constructors that initialize default values must be called
+     * //TODO due to room persistence not able to hold objects, constructors that initialize default values must be called - not anymore - change code if not
      * @param picName
      * @return
      */
@@ -53,11 +53,11 @@ public class RectDaoImpl {
         return appDb.rectDao().getRect(picName, rect);
     }
 
-    public SpeakingRect getRect(String picName, Point point){
+    public Rect getRect(String picName, Point point){//TODO return rect or speakingRect - null check
         List<SpeakingRect> allRectsOfAPic = getAllRectsOfAPic(picName);
         for(SpeakingRect rectangle : allRectsOfAPic){
             if (rectangle.getRect().contains(point.x, point.y)) {
-                return rectangle;
+                return rectangle.getRect();
             }
         }
 
@@ -88,12 +88,19 @@ public class RectDaoImpl {
         appDb.rectDao().deleteAllRectsOfAPic(picName);
     }
 
-    public SpeakingRect deleteRect(String picName, Point point){
+
+    /**
+     *
+     * @param picName picture name to which this rect belongs
+     * @param point the point that is clicked - if there is a rectangle there - it will be deleted
+     * @return inner Rect that is removed
+     */
+    public Rect deleteRect(String picName, Point point){//TODO return rect or speakingRect - null check
         List<SpeakingRect> allRectsOfAPic = getAllRectsOfAPic(picName);
         for(SpeakingRect rectangle : allRectsOfAPic){
             if (rectangle.getRect().contains(point.x, point.y)) {
                 appDb.rectDao().deleteRect(picName, rectangle.getRect());
-                return rectangle;
+                return rectangle.getRect();
             }
         }
 
