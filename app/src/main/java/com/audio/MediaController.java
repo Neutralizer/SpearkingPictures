@@ -21,8 +21,12 @@ public class MediaController {
     private MediaPlayer mediaPlayer;
 
     public MediaController(Activity activity) {
+        createFolderIfNotExisting();
+
 //        verifyRecordPermissions(activity);
     }
+
+
 
     private void verifyRecordPermissions(Activity activity) {
         // Check if we have mic permission
@@ -62,8 +66,25 @@ public class MediaController {
         mediaRecorder.stop();
     }
 
+    private void createFolderIfNotExisting() {
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "SpeakingPictures");
+        if(!file.exists() || !file.isDirectory()){//TODO isDir checks if it exists actually
+            //create the dir or stop the program
+            boolean mkdirs = file.mkdirs();
+            if (!mkdirs) {
+                try {
+                    throw new IOException("Could not create dir" + file.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
     private String reconstructPathSave(String picName, Rect rect){
-        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + picName + rect.left + rect.top + rect.right + rect.bottom + ".3gp";
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "SpeakingPictures" + File.separator +
+                picName + rect.left + rect.top + rect.right + rect.bottom + ".3gp";
 
     }
 
@@ -78,6 +99,7 @@ public class MediaController {
             String pathForSave = reconstructPathSave(picName, rect);
 
             mediaPlayer.setDataSource(pathForSave);//TODO this will work only for 1 file - not anymore
+            System.out.println(pathForSave);//TODO test
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();

@@ -48,14 +48,14 @@ public class ImageViewMain extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        verifyPermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
+        //TODO permission problem
         customImageViewObj = new CustomImageView(this);
         rectDaoImpl = new RectDaoImpl(this);//new
         final CustomImageView imgView =  findViewById(R.id.myimageID);
         gestureDetector = new GestureDetector(this,this);
         mediaController = new MediaController(this);
-        verifyPermissions(this);//TODO this is first and the button is 2nd, because you are displayed the pics before allowing it- api21, not api23
-        //TODO permission problem
+
         Button buttonLoadImage = (Button) findViewById(R.id.buttonLoadPicture);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
 
