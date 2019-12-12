@@ -93,7 +93,7 @@ public class RectDaoImpl {
      *
      * @param picName picture name to which this rect belongs
      * @param point the point that is clicked - if there is a rectangle there - it will be deleted
-     * @return inner Rect that is removed
+     * @return the location of the deleted inner rect
      */
     public Rect deleteRect(String picName, Point point){//TODO return rect or speakingRect - null check to pass to media class for deletion
         List<SpeakingRect> allRectsOfAPic = getAllRectsOfAPic(picName);
