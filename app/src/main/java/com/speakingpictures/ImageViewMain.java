@@ -80,8 +80,10 @@ public class ImageViewMain extends Activity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Rect rect = rectDaoImpl.getRect(currentPicName, imageViewClickPosition);
-                mediaController.playSound(currentPicName,rect); // TODO start playing in new thread and when it is finished - stop playing from that thread - may not be able to stop
+                SpeakingRect rect = rectDaoImpl.getRect(currentPicName, imageViewClickPosition);
+                if(rect != null){
+                    mediaController.playSound(currentPicName,rect.getRect()); // TODO start playing in new thread and when it is finished - stop playing from that thread - may not be able to stop
+                }
 
             }
         }).start();
@@ -96,11 +98,13 @@ public class ImageViewMain extends Activity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Rect rect = rectDaoImpl.deleteRect(currentPicName, imageViewClickPosition);
+                SpeakingRect rect = rectDaoImpl.deleteRect(currentPicName, imageViewClickPosition);
                 Log.d("glistener", "it is doubletapping");
-                setRectanglesInsideCustomView(imgView);
-                //TODO delete audiofile when deleting rect - check if it works
-                mediaController.deleteAudioFile(currentPicName,rect);
+                if(rect != null){
+                    setRectanglesInsideCustomView(imgView);
+                    //TODO delete audiofile when deleting rect - check if it works
+                    mediaController.deleteAudioFile(currentPicName,rect.getRect());
+                }
 
             }
         }).start();
