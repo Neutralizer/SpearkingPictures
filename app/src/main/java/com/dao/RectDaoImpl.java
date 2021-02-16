@@ -117,9 +117,4 @@ public class RectDaoImpl {
         return rect;
     }
 
-
-
-
-
-
 }

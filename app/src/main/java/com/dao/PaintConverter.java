@@ -16,8 +16,6 @@ public class PaintConverter {
         if(value == null){
             return new Paint();
         }
-//        Paint paint = new Gson().fromJson(value,Paint.class);
-//        return paint;
         List<String> list = Arrays.asList(value.split(","));
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
@@ -32,8 +30,6 @@ public class PaintConverter {
         if(value == null){
             return null;
         }
-//        String json = new Gson().toJson(value);
-//        return json;
         String result = value.getColor() + "," +  value.getStrokeWidth() + "," + value.getAlpha();
         return result;
     }

@@ -184,7 +184,7 @@ public class ImageViewMain extends Activity implements
 
 //                rectDaoImpl.deleteAll();//TODO clear all
                 List<SpeakingRect> allRects = rectDaoImpl.getAllRects();
-                System.out.println(allRects.size() + "sizeeeeeeeeeeeeeeeeeee");//TODO
+                System.out.println(allRects.size() + "size");//TODO
                 for(SpeakingRect rect : allRects){
                     System.out.println("id and rectname and rect loc--- "  + rect.getId()+ " " +  rect.getPicName() + " " + rect.getRect().bottom + " is bottom");
                 }
@@ -218,13 +218,8 @@ public class ImageViewMain extends Activity implements
             currentPicName = file.getName();
             Picasso.with(getApplicationContext()).load(file).fit().centerInside().into(imageView);
 
-//            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));//not needed //init
             setRectanglesInsideCustomView(imageView);
-
-
         }
-
-
     }
 
 

@@ -29,23 +29,6 @@ public class SpeakingRect {
         this.rect = rect;
     }
 
-//    @Ignore
-//    public SpeakingRect(int id, String picName, Point point, int borderThickness, int size, int color, int alpha) {
-//        this.id = id;
-//        this.picName = picName;
-//        this.paint = new Paint();
-//        this.rect = new Rect();
-//        this.point = point;
-//        this.borderThickness = borderThickness;
-//        this.size = size;
-//        this.color = color;
-//        this.alpha = alpha;
-//        setRectPosition(this.point);
-//        paint.setColor(this.color);
-//        paint.setStrokeWidth(this.borderThickness);
-//        paint.setAlpha(this.alpha);//1-255
-//        paint.setStyle(Paint.Style.STROKE);
-//    }
 
     public int getId() {
         return id;

@@ -48,7 +48,6 @@ public class MediaController {
         if (picName == null || rect == null) {
             return;
         }
-//        String pathForSave = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + picName + rect.left + rect.top + rect.right + rect.bottom + ".3gp";
         String pathForSave = reconstructPathSave(picName, rect);
 
         setupMediaRecorder(pathForSave);
@@ -98,7 +97,7 @@ public class MediaController {
 //            mediaPlayer = null;//TODO user stops other playing sound, but wants to play this one now - test
 //        }
 
-        mediaPlayer = new MediaPlayer();
+        mediaPlayer = new MediaPlayer();//TODO don't recreate mp on every sound
         try {
             String pathForSave = reconstructPathSave(picName, rect);
 

@@ -53,26 +53,4 @@ public class HoldNotifier {
         this.isHeld = false;
     }
 
-    /*public boolean checkIfIsHeld() {//TODO redesign this
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    Thread.sleep(holdDuration);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                if (getIsPressed()) {
-                    System.out.println("it is a hold");
-                    isHeld = true;
-                }
-
-            }
-        }).start();
-
-        return isHeld;
-    }*/
-
 }
